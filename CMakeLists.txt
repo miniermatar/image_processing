@@ -25,6 +25,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #endif()
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(PkgConfig REQUIRED)
+include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 if(ANDROID)
   add_library(image_proccesing SHARED
@@ -32,6 +35,8 @@ if(ANDROID)
     src/image_proccesing.cpp
     src/image_proccesing.h
     src/image_proccesing.ui
+    src/image_adjustments.cpp
+    src/image_adjustments.h
   )
 else()
   add_executable(image_proccesing
@@ -39,7 +44,11 @@ else()
     src/image_proccesing.cpp
     src/image_proccesing.h
     src/image_proccesing.ui
+    src/image_adjustments.cpp
+    src/image_adjustments.h
   )
+
 endif()
 
-target_link_libraries(image_proccesing PRIVATE Qt5::Widgets)
+target_link_libraries(image_proccesing PRIVATE Qt5::Widgets ${OpenCV_LIBS})
+

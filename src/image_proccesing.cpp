@@ -1,4 +1,5 @@
 #include "image_proccesing.h"
+#include "image_adjustments.h"
 #include "./ui_image_proccesing.h"
 
 Image_Proccesing::Image_Proccesing(QWidget *parent)
@@ -41,5 +42,12 @@ void Image_Proccesing::on_browse_btn_clicked()
 
 void Image_Proccesing::on_crop_btn_clicked()
 {
+    QString path = ui->path->text() + "/0001776.jpeg";
+    image_adjustments data;
+    QPixmap pix=data.crop (path,ui->width_start->value(),ui->height_start->value(),ui->width_end->value()-ui->width_start->value(),ui->height_end->value()-ui->height_start->value());
+    ui->image_preview->setPixmap(pix);
+    int w = ui->image_preview->width();
+    int h = ui->image_preview->height();
+    ui->image_preview->setPixmap (pix.scaled (w,h,Qt::KeepAspectRatio));
 
 }
