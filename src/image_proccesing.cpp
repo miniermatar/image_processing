@@ -43,11 +43,26 @@ void Image_Proccesing::on_browse_btn_clicked()
 void Image_Proccesing::on_crop_btn_clicked()
 {
     QString path = ui->path->text() + "/0001776.jpeg";
-    image_adjustments data;
-    QPixmap pix=data.crop (path,ui->width_start->value(),ui->height_start->value(),ui->width_end->value()-ui->width_start->value(),ui->height_end->value()-ui->height_start->value());
+    std::string path_text = path.toUtf8().constData();
+    image_adjustments data(path_text);
+    QPixmap pix=data.crop_preview (ui->width_start->value(),ui->height_start->value(),ui->width_end->value()-ui->width_start->value(),ui->height_end->value()-ui->height_start->value());
     ui->image_preview->setPixmap(pix);
     int w = ui->image_preview->width();
     int h = ui->image_preview->height();
     ui->image_preview->setPixmap (pix.scaled (w,h,Qt::KeepAspectRatio));
+
+}
+
+void Image_Proccesing::on_process_images_btn_clicked()
+{
+    std::string path = ui->path->text().toUtf8().constData();
+    std::vector<std::string> fnames;
+    for (const auto & entry : std::filesystem::directory_iterator(path)) {
+        fnames.emplace_back(entry.path());
+    }
+    std::sort(fnames.begin(), fnames.end());
+
+
+
 
 }

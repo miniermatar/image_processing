@@ -9,9 +9,31 @@
 
 class image_adjustments
 {
+private:
+    cv::Mat *_image;
+    std::string _path;
+    long _time_s;
+    long _intensity;
+
 public:
-    image_adjustments();
-    QPixmap crop (QString path, int width_start, int width_end, int height_start, int height_end);
+    //getter and setter
+    cv::Mat *GetImageHandle() { return _image; }
+    std::string GetPath() {return _path;}
+    long GetTime() {return _time_s;}
+    long GetIntensity() {return _intensity;}
+    void SetImageHandle(cv::Mat *image) { _image=image; }
+    void SetPath(std::string path) {_path=path;}
+    void SetTime(long time_s) {_time_s=time_s;}
+    void SetIntensity(long intensity) {_intensity=intensity;}
+
+
+    image_adjustments(std::string path); //Constructor
+    ~image_adjustments(); //Destructor
+    image_adjustments(const image_adjustments &source); //Copy constructor
+    image_adjustments &operator=(const image_adjustments &source); //copy assigment operator
+    image_adjustments (image_adjustments &&source); //Move Constructor
+    image_adjustments &operator=(image_adjustments &&source);// 5- Move assigment operator
+    QPixmap crop_preview (int width_start, int height_start, int width_lenght, int heigh_lenght);
 };
 
 #endif // IMAGE_ADJUSTMENTS_H

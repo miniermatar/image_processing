@@ -154,6 +154,19 @@
     <string>Crop</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="process_images_btn">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>690</y>
+     <width>221</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Process Images</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

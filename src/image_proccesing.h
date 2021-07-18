@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QFileDialog>
+#include <filesystem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Image_Proccesing; }
@@ -20,6 +21,8 @@ private slots:
     void on_browse_btn_clicked();
 
     void on_crop_btn_clicked();
+
+    void on_process_images_btn_clicked();
 
 private:
     Ui::Image_Proccesing *ui;
