@@ -1,4 +1,4 @@
-#include "image_adjustments.h"
+﻿#include "image_adjustments.h"
 
 // Constructor WITH memory allocation
 image_adjustments::image_adjustments(std::string path)
@@ -77,4 +77,48 @@ QPixmap image_adjustments::crop_preview (int width_start, int height_start, int 
     cv::cvtColor(*_image, *_image, cv::COLOR_BGR2RGB);
     return QPixmap::fromImage(QImage((unsigned char*) _image->data, _image->cols, _image->rows, _image->step,QImage::Format_RGB888));
 }
+
+void image_adjustments::crop_bw(int width_start, int height_start, int width_lenght, int heigh_lenght)
+{
+    cv::Rect crop_region(width_start, height_start, width_lenght, heigh_lenght);
+    *_image=(*_image)(crop_region);
+    cv::cvtColor(*_image, *_image, cv::COLOR_BGR2GRAY);
+//    cv::imshow("GRAY image ",*_image);
+//    cv::waitKey(0);
+}
+
+long image_adjustments::intensity()
+{
+    long intensity=0;
+    for (int r = 0; r < _image->rows; r++)
+    {
+        for (int c = 0; c < _image->cols; c++)
+        {
+            intensity= intensity+255-(*_image).at<uchar>(r, c);
+        }
+    }
+    _intensity=intensity;
+    return intensity;
+}
+
+long image_adjustments::time_s()
+{
+
+    std::filesystem::path p(_path);
+    std::string str(p.stem().u8string());
+    int i=0;
+    for (i = str.length()-1; i>=0; i-- ){
+        if ( !(isdigit(str[i])) )
+            break;
+    }
+
+    // remove the first chars, which aren't digits
+    str = str.substr(i+1, str.length() - i );
+
+    // convert the remaining text to an integer
+    _time_s= atol(str.c_str());
+    return _time_s;
+}
+
+
 

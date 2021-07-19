@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QFileDialog>
 #include <filesystem>
+#include <map>
+#include <tuple>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Image_Proccesing; }
@@ -16,6 +18,7 @@ class Image_Proccesing : public QWidget
 public:
     Image_Proccesing(QWidget *parent = nullptr);
     ~Image_Proccesing();
+    std::vector<std::string> path_list (QString directory);
 
 private slots:
     void on_browse_btn_clicked();

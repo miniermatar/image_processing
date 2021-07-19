@@ -6,6 +6,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <QWidget>
+#include <filesystem>
 
 class image_adjustments
 {
@@ -33,7 +34,10 @@ public:
     image_adjustments &operator=(const image_adjustments &source); //copy assigment operator
     image_adjustments (image_adjustments &&source); //Move Constructor
     image_adjustments &operator=(image_adjustments &&source);// 5- Move assigment operator
+    void crop_bw (int width_start, int height_start, int width_lenght, int heigh_lenght);
     QPixmap crop_preview (int width_start, int height_start, int width_lenght, int heigh_lenght);
+    long intensity();
+    long time_s();
 };
 
 #endif // IMAGE_ADJUSTMENTS_H
