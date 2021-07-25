@@ -6,6 +6,9 @@
 #include <filesystem>
 #include <map>
 #include <tuple>
+#include <qcustomplot.h>
+#include <algorithm>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Image_Proccesing; }
@@ -27,7 +30,10 @@ private slots:
 
     void on_process_images_btn_clicked();
 
+   // void on_qwtPlot_itemAttached(QwtPlotItem *plotItem, bool on);
+
 private:
     Ui::Image_Proccesing *ui;
+
 };
 #endif // IMAGE_PROCCESING_H
