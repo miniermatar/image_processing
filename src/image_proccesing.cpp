@@ -75,13 +75,18 @@ void Image_Proccesing::on_process_images_btn_clicked()
     std::multimap<std::string, std::tuple<double, double>> summary;
     for (auto i = fnames.begin(); i != fnames.end(); ++i)
     {
-        std::cout<<"Processing image: "<<*i<<std::endl;
-        image_adjustments data(*i);
-        data.crop_bw (ui->width_start->value(),ui->height_start->value(),ui->width_end->value()-ui->width_start->value(),ui->height_end->value()-ui->height_start->value());
-        double intensity=data.intensity();
-        double time_s=data.time_s();
+        std::filesystem::path p(*i);
+            if (p.extension()==".jpeg" || p.extension()==".jpg" || p.extension()==".png" || p.extension()==".tiff") {
 
-        summary.insert(make_pair(*i, std::make_tuple(time_s, intensity)));
+            std::cout<<"Processing image: "<<*i<<std::endl;
+            image_adjustments data(*i);
+            data.crop_bw (ui->width_start->value(),ui->height_start->value(),ui->width_end->value()-ui->width_start->value(),ui->height_end->value()-ui->height_start->value(),ui->save_crop->isChecked());
+
+            double intensity=data.intensity();
+            double time_s=data.time_s();
+
+            summary.insert(make_pair(*i, std::make_tuple(time_s, intensity)));
+        }
     }
     //std::cout<<std::to_string(intensity)<<"\n";
     //std::cout<<std::to_string(time_s)<<"\n";
