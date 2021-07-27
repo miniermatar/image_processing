@@ -84,7 +84,7 @@ void image_adjustments::crop_bw(int width_start, int height_start, int width_len
     *_image=(*_image)(crop_region);
     if (save_img=true) {
         std::filesystem::path p(_path);
-        cv::imwrite(p.remove_filename().u8string()+"cropped/"+p.stem().u8string()+"_cropped.jpeg", *_image);
+        cv::imwrite(p.remove_filename().u8string()+"cropped/cropped_"+p.stem().u8string()+".jpeg", *_image);
     }
 
     cv::cvtColor(*_image, *_image, cv::COLOR_BGR2GRAY);

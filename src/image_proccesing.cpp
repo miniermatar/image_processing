@@ -94,7 +94,7 @@ void Image_Proccesing::on_process_images_btn_clicked()
     int i=0;
     for (std::multimap<std::string, std::tuple<double, double>>::iterator it = summary.begin(); it != summary.end(); it++) {
         std::cout << it->first << " :: " << std::get<0>(it->second) << " :: " << std::get<1>(it->second) << std::endl;
-        x.push_back((std::get<0>(it->second))/1000*60);
+        x.push_back((std::get<0>(it->second))/(60));
         y.push_back(std::get<1>(it->second));
     }
     double x_max = *std::max_element(x.constBegin(), x.constEnd());
