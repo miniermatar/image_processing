@@ -23,11 +23,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
 #    endif()
 #endif()
-
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake;${CMAKE_MODULE_PATH}")
+find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(PkgConfig REQUIRED)
+
+
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
+# then make sure to link to Charts when building your app
 include_directories( ${OpenCV_INCLUDE_DIRS} )
+
+
 
 if(ANDROID)
   add_library(image_proccesing SHARED
@@ -37,6 +42,7 @@ if(ANDROID)
     src/image_proccesing.ui
     src/image_adjustments.cpp
     src/image_adjustments.h
+
   )
 else()
   add_executable(image_proccesing
@@ -46,9 +52,9 @@ else()
     src/image_proccesing.ui
     src/image_adjustments.cpp
     src/image_adjustments.h
+
   )
 
 endif()
 
-target_link_libraries(image_proccesing PRIVATE Qt5::Widgets ${OpenCV_LIBS})
-
+target_link_libraries(image_proccesing PRIVATE Qt5::Widgets ${OpenCV_LIBS} qcustomplot)

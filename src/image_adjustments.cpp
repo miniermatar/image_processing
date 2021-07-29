@@ -78,10 +78,15 @@ QPixmap image_adjustments::crop_preview (int width_start, int height_start, int 
     return QPixmap::fromImage(QImage((unsigned char*) _image->data, _image->cols, _image->rows, _image->step,QImage::Format_RGB888));
 }
 
-void image_adjustments::crop_bw(int width_start, int height_start, int width_lenght, int heigh_lenght)
+void image_adjustments::crop_bw(int width_start, int height_start, int width_lenght, int heigh_lenght, bool save_img)
 {
     cv::Rect crop_region(width_start, height_start, width_lenght, heigh_lenght);
     *_image=(*_image)(crop_region);
+    if (save_img=true) {
+        std::filesystem::path p(_path);
+        cv::imwrite(p.remove_filename().u8string()+"cropped/cropped_"+p.stem().u8string()+".jpeg", *_image);
+    }
+
     cv::cvtColor(*_image, *_image, cv::COLOR_BGR2GRAY);
 //    cv::imshow("GRAY image ",*_image);
 //    cv::waitKey(0);

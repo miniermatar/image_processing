@@ -34,7 +34,7 @@ public:
     image_adjustments &operator=(const image_adjustments &source); //copy assigment operator
     image_adjustments (image_adjustments &&source); //Move Constructor
     image_adjustments &operator=(image_adjustments &&source);// 5- Move assigment operator
-    void crop_bw (int width_start, int height_start, int width_lenght, int heigh_lenght);
+    void crop_bw (int width_start, int height_start, int width_lenght, int heigh_lenght,bool save_img);
     QPixmap crop_preview (int width_start, int height_start, int width_lenght, int heigh_lenght);
     long intensity();
     long time_s();
