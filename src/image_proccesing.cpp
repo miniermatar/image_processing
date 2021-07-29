@@ -84,10 +84,7 @@ void Image_Proccesing::on_process_images_btn_clicked()
 {
     std::vector<std::string> fnames=path_list(ui->path->text());
     std::multimap<std::string, std::tuple<double, double>> summary;
-<<<<<<< HEAD
     auto start = std::chrono::system_clock::now();
-=======
->>>>>>> 01054b30b5aa3bea332b60a3566693b887901e1e
     for (auto i = fnames.begin(); i != fnames.end(); ++i)
     {
         std::filesystem::path p(*i);
@@ -103,7 +100,6 @@ void Image_Proccesing::on_process_images_btn_clicked()
             summary.insert(make_pair(*i, std::make_tuple(time_s, intensity)));
         }
     }
-<<<<<<< HEAD
     std::chrono::duration<double> dur= std::chrono::system_clock::now() - start;
     std::cout << "Time for processing " << dur.count() << " seconds" << std::endl;
     //std::cout<<std::to_string(intensity)<<"\n";
@@ -122,17 +118,6 @@ void Image_Proccesing::on_process_images_btn_clicked()
 
     }
 
-=======
-    //std::cout<<std::to_string(intensity)<<"\n";
-    //std::cout<<std::to_string(time_s)<<"\n";
-    QVector<double> x,y;
-    int i=0;
-    for (std::multimap<std::string, std::tuple<double, double>>::iterator it = summary.begin(); it != summary.end(); it++) {
-        std::cout << it->first << " :: " << std::get<0>(it->second) << " :: " << std::get<1>(it->second) << std::endl;
-        x.push_back((std::get<0>(it->second))/(60));
-        y.push_back(std::get<1>(it->second));
-    }
->>>>>>> 01054b30b5aa3bea332b60a3566693b887901e1e
     double x_max = *std::max_element(x.constBegin(), x.constEnd());
     double y_max = *std::max_element(y.constBegin(), y.constEnd());
     double x_min = *std::min_element(x.constBegin(), x.constEnd());
