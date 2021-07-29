@@ -8,9 +8,12 @@
 #include <tuple>
 #include <qcustomplot.h>
 #include <algorithm>
+<<<<<<< HEAD
 #include <iostream>
 #include <fstream>
 #include <chrono>
+=======
+>>>>>>> 01054b30b5aa3bea332b60a3566693b887901e1e
 
 
 QT_BEGIN_NAMESPACE
