@@ -106,19 +106,15 @@ void Image_Proccesing::on_process_images_btn_clicked()
         threads[i].join();
     }
 
-
-
-
-
     std::chrono::duration<double> dur= std::chrono::system_clock::now() - start;
-    std::cout << "Time for processing " << dur.count() << " seconds" << std::endl;
+    std::cout << "Time for processing: " << dur.count() << " seconds" << " with "<< NUM_THREADS << " threads"<< std::endl;
     //std::cout<<std::to_string(intensity)<<"\n";
     //std::cout<<std::to_string(time_s)<<"\n";
 
     QVector<double> x,y;
     int i=0;
     for (std::multimap<std::string, std::tuple<double, double>>::iterator it = summary.begin(); it != summary.end(); it++) {
-        //std::cout << it->first << " :: " << std::get<0>(it->second) << " :: " << std::get<1>(it->second) << std::endl;
+        std::cout << it->first << " :: " << std::get<0>(it->second) << " :: " << std::get<1>(it->second) << std::endl;
         x.push_back((std::get<0>(it->second))/(60));
         y.push_back(std::get<1>(it->second));
     }
