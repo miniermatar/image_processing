@@ -26,6 +26,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake;${CMAKE_MODULE_PATH}")
 find_package(Qt5 COMPONENTS Widgets PrintSupport REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package (Threads)
 
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
@@ -57,4 +58,4 @@ else()
 
 endif()
 
-target_link_libraries(image_proccesing PRIVATE Qt5::Widgets ${OpenCV_LIBS} qcustomplot)
+target_link_libraries(image_proccesing PRIVATE Qt5::Widgets ${OpenCV_LIBS} qcustomplot Threads::Threads)

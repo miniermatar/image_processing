@@ -2,7 +2,7 @@
 #include "image_adjustments.h"
 #include "./ui_image_proccesing.h"
 
-
+std::mutex myMutex;
 Image_Proccesing::Image_Proccesing(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Image_Proccesing)
@@ -84,22 +84,32 @@ void Image_Proccesing::on_process_images_btn_clicked()
 {
     std::vector<std::string> fnames=path_list(ui->path->text());
     std::multimap<std::string, std::tuple<double, double>> summary;
+
+    static const unsigned int NUM_THREADS = std::thread::hardware_concurrency();
+    unsigned int filesperthread = fnames.size()/NUM_THREADS;
+    std::thread threads[NUM_THREADS];
     auto start = std::chrono::system_clock::now();
-    for (auto i = fnames.begin(); i != fnames.end(); ++i)
-    {
-        std::filesystem::path p(*i);
-            if (p.extension()==".jpeg" || p.extension()==".jpg" || p.extension()==".png" || p.extension()==".tiff") {
 
-            std::cout<<"Processing image: "<<*i<<std::endl;
-            image_adjustments data(*i);
-            data.crop_bw (ui->width_start->value(),ui->height_start->value(),ui->width_end->value()-ui->width_start->value(),ui->height_end->value()-ui->height_start->value(),ui->save_crop->isChecked());
 
-            double intensity=data.intensity();
-            double time_s=data.time_s();
 
-            summary.insert(make_pair(*i, std::make_tuple(time_s, intensity)));
+    for(unsigned int i = 0 ; i < NUM_THREADS; ++i)
+        {
+            unsigned int end;
+            if (i==NUM_THREADS-1)
+                end = fnames.size();
+            else
+                end = (i+1)*filesperthread;
+            threads[i] = std::thread(&Image_Proccesing::parallel_process, this, std::ref(fnames), std::ref(summary), i*filesperthread,end);
         }
+    for(unsigned int i = 0 ; i < NUM_THREADS ; ++i)
+    {
+        threads[i].join();
     }
+
+
+
+
+
     std::chrono::duration<double> dur= std::chrono::system_clock::now() - start;
     std::cout << "Time for processing " << dur.count() << " seconds" << std::endl;
     //std::cout<<std::to_string(intensity)<<"\n";
@@ -135,3 +145,23 @@ void Image_Proccesing::on_process_images_btn_clicked()
     ui->customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 4));
     ui->customPlot->replot();
 }
+
+void Image_Proccesing::parallel_process(std::vector<std::string> fnames, std::multimap<std::string, std::tuple<double, double>> data_summary, unsigned int start, unsigned int end) {
+
+    for (int i = start; i != end; ++i)
+    {
+        std::filesystem::path p(fnames[i]);
+            if (p.extension()==".jpeg" || p.extension()==".jpg" || p.extension()==".png" || p.extension()==".tiff") {
+
+            std::cout<<"Processing image: "<<fnames[i]<<std::endl;
+            image_adjustments data(fnames[i]);
+            data.crop_bw (ui->width_start->value(),ui->height_start->value(),ui->width_end->value()-ui->width_start->value(),ui->height_end->value()-ui->height_start->value(),ui->save_crop->isChecked());
+
+            double intensity=data.intensity();
+            double time_s=data.time_s();
+            std::lock_guard<std::mutex> myLock(myMutex);
+            data_summary.insert(make_pair(fnames[i], std::make_tuple(time_s, intensity)));
+        }
+    }
+}
+
