@@ -88,6 +88,13 @@ void Image_Proccesing::on_process_images_btn_clicked()
     static const unsigned int NUM_THREADS = std::thread::hardware_concurrency();
     unsigned int filesperthread = fnames.size()/NUM_THREADS;
     std::thread threads[NUM_THREADS];
+
+    std::filesystem::file_status s = std::filesystem::status (ui->path->text().toStdString()+"/cropped");
+    if (ui->save_crop->isChecked()) {
+        if (!std::filesystem::exists(s) || !std::filesystem::is_directory(s))
+            std::filesystem::create_directory(ui->path->text().toStdString()+"/cropped");
+    }
+
     auto start = std::chrono::system_clock::now();
 
 
@@ -114,7 +121,7 @@ void Image_Proccesing::on_process_images_btn_clicked()
     QVector<double> x,y;
     int i=0;
     for (std::multimap<std::string, std::tuple<double, double>>::iterator it = summary.begin(); it != summary.end(); it++) {
-        std::cout << it->first << " :: " << std::get<0>(it->second) << " :: " << std::get<1>(it->second) << std::endl;
+        //std::cout << it->first << " :: " << std::get<0>(it->second) << " :: " << std::get<1>(it->second) << std::endl;
         x.push_back((std::get<0>(it->second))/(60));
         y.push_back(std::get<1>(it->second));
     }
@@ -142,9 +149,9 @@ void Image_Proccesing::on_process_images_btn_clicked()
     ui->customPlot->replot();
 }
 
-void Image_Proccesing::parallel_process(std::vector<std::string> fnames, std::multimap<std::string, std::tuple<double, double>> data_summary, unsigned int start, unsigned int end) {
+void Image_Proccesing::parallel_process(std::vector<std::string> &fnames, std::multimap<std::string, std::tuple<double, double>> &data_summary, unsigned int start, unsigned int end) {
 
-    for (int i = start; i != end; ++i)
+    for (int i = start; i < end; ++i)
     {
         std::filesystem::path p(fnames[i]);
             if (p.extension()==".jpeg" || p.extension()==".jpg" || p.extension()==".png" || p.extension()==".tiff") {

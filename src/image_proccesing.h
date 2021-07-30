@@ -27,7 +27,7 @@ public:
     ~Image_Proccesing();
     std::vector<std::string> path_list (QString directory);
     void save_file(std::multimap<std::string, std::tuple<double, double>> data);
-    void parallel_process(std::vector<std::string> fnames, std::multimap<std::string, std::tuple<double, double>> data_summary, unsigned int start, unsigned int end);
+    void parallel_process(std::vector<std::string> &fnames, std::multimap<std::string, std::tuple<double, double>> &data_summary, unsigned int start, unsigned int end);
 
 private slots:
     void on_browse_btn_clicked();
