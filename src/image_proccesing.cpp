@@ -49,21 +49,30 @@ void Image_Proccesing::on_browse_btn_clicked()
     QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
     if (!directory.isEmpty()) {
         ui->path->setText(directory);
+        std::vector<std::string> fnames=path_list(ui->path->text());
+        QPixmap pix(fnames.at(0).c_str());
+        ui->image_preview->setPixmap(pix);
+        int w = ui->image_preview->width();
+        int h = ui->image_preview->height();
+        ui->image_preview->setPixmap (pix.scaled (w,h,Qt::KeepAspectRatio));
+        ui->width_start->setMaximum(pix.width());
+        ui->width_start->setValue(0);
+        ui->width_end->setMaximum(pix.width());
+        ui->width_end->setValue(pix.width());
+        ui->height_start->setMaximum(pix.height());
+        ui->height_start->setValue(0);
+        ui->height_end->setMaximum(pix.height());
+        ui->height_end->setValue(pix.height());
+        ui->crop_btn->setEnabled(true);
+        ui->process_images_btn->setEnabled(true);
+        ui->save_crop->setEnabled(true);
+        ui->save_data->setEnabled(true);
+        ui->customPlot->addGraph();
+        ui->customPlot->graph(0)->data()->clear();
+        ui->customPlot->replot();
     }
-    std::vector<std::string> fnames=path_list(ui->path->text());
-    QPixmap pix(fnames.at(0).c_str());
-    ui->image_preview->setPixmap(pix);
-    int w = ui->image_preview->width();
-    int h = ui->image_preview->height();
-    ui->image_preview->setPixmap (pix.scaled (w,h,Qt::KeepAspectRatio));
-    ui->width_start->setMaximum(pix.width());
-    ui->width_start->setValue(0);
-    ui->width_end->setMaximum(pix.width());
-    ui->width_end->setValue(pix.width());
-    ui->height_start->setMaximum(pix.height());
-    ui->height_start->setValue(0);
-    ui->height_end->setMaximum(pix.height());
-    ui->height_end->setValue(pix.height());
+    else
+        std::cout << directory.toStdString() << " is empty. Select another directory";
 }
 
 void Image_Proccesing::on_crop_btn_clicked()
@@ -88,17 +97,7 @@ void Image_Proccesing::on_process_images_btn_clicked()
     static const unsigned int NUM_THREADS = std::thread::hardware_concurrency();
     unsigned int filesperthread = fnames.size()/NUM_THREADS;
     std::thread threads[NUM_THREADS];
-
-    std::filesystem::file_status s = std::filesystem::status (ui->path->text().toStdString()+"/cropped");
-    if (ui->save_crop->isChecked()) {
-        if (!std::filesystem::exists(s) || !std::filesystem::is_directory(s))
-            std::filesystem::create_directory(ui->path->text().toStdString()+"/cropped");
-    }
-
     auto start = std::chrono::system_clock::now();
-
-
-
     for(unsigned int i = 0 ; i < NUM_THREADS; ++i)
         {
             unsigned int end;
@@ -135,8 +134,6 @@ void Image_Proccesing::on_process_images_btn_clicked()
     double y_max = *std::max_element(y.constBegin(), y.constEnd());
     double x_min = *std::min_element(x.constBegin(), x.constEnd());
     double y_min = *std::min_element(y.constBegin(), y.constEnd());
-
-    ui->customPlot->addGraph();
     ui->customPlot->graph(0)->setData(x, y);
     // give the axes some labels:
     ui->customPlot->xAxis->setLabel("Time, min");
@@ -151,7 +148,7 @@ void Image_Proccesing::on_process_images_btn_clicked()
 
 void Image_Proccesing::parallel_process(std::vector<std::string> &fnames, std::multimap<std::string, std::tuple<double, double>> &data_summary, unsigned int start, unsigned int end) {
 
-    for (int i = start; i < end; ++i)
+    for (int i = start; i != end; ++i)
     {
         std::filesystem::path p(fnames[i]);
             if (p.extension()==".jpeg" || p.extension()==".jpg" || p.extension()==".png" || p.extension()==".tiff") {

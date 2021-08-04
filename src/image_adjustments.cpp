@@ -84,6 +84,11 @@ void image_adjustments::crop_bw(int width_start, int height_start, int width_len
     *_image=(*_image)(crop_region);
     if (save_img=true) {
         std::filesystem::path p(_path);
+        std::filesystem::file_status s = std::filesystem::status (p.remove_filename().u8string()+"cropped");
+
+        if (!std::filesystem::exists(s) || !std::filesystem::is_directory(s))
+            std::filesystem::create_directory("cropped");
+
         cv::imwrite(p.remove_filename().u8string()+"cropped/cropped_"+p.stem().u8string()+".jpeg", *_image);
     }
 
