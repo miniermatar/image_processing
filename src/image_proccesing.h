@@ -12,7 +12,7 @@
 #include <fstream>
 #include <chrono>
 #include <mutex>
-
+#include <thread>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Image_Proccesing; }
