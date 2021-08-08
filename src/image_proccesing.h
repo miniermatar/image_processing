@@ -6,7 +6,7 @@
 #include <filesystem>
 #include <map>
 #include <tuple>
-#include <qcustomplot.h>
+#include "qcustomplot.h"
 #include <algorithm>
 #include <iostream>
 #include <fstream>
