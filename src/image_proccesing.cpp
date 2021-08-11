@@ -94,6 +94,15 @@ void Image_Proccesing::on_process_images_btn_clicked()
     std::vector<std::string> fnames=path_list(ui->path->text());
     std::multimap<std::string, std::tuple<double, double>> summary;
 
+    if (ui->save_crop->isChecked()==true) {
+        std::filesystem::path p(ui->path->text().toStdString());
+        std::filesystem::current_path (p);
+        std::filesystem::file_status s = std::filesystem::status (p.remove_filename().u8string()+"cropped");
+
+        if (!std::filesystem::exists(s) || !std::filesystem::is_directory(s))
+            std::filesystem::create_directory("cropped");
+    }
+
     static const unsigned int NUM_THREADS = std::thread::hardware_concurrency();
     unsigned int filesperthread = fnames.size()/NUM_THREADS;
     std::thread threads[NUM_THREADS];
