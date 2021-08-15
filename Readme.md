@@ -49,7 +49,7 @@ The image below shows the graphical user interface.
   * Source: https://github.com/dbzhang800/QCustomPlot
   >Note In Ubuntu, it can be installed with the following command: `sudo apt install libqcustomplot-dev`
         
-  >Due to recent updates in QT, the Qcustomplot header files needs to be updated. THe file can be updated by opening the Qcustomplot.h header file located at `/usr/include/qcustomplot.h` and line 91 should be updated from 
+  >Due to recent updates in QT, the qcustomplot header files needs to be updated. The file can be updated by opening the Qcustomplot.h header file located at `/usr/include/qcustomplot.h` and line 91 should be updated from 
   >`#include <QtPrintSupport>` to `#include <QtPrintSupport/QtPrintSupport>`        
 * OpenCV >= 4.1
   * The OpenCV source code can be found here: https://github.com/opencv/opencv
